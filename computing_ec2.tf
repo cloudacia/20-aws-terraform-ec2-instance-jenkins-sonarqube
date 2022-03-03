@@ -6,7 +6,7 @@ resource "aws_instance" "web01" {
     host = self.public_ip
   }
   ami                         = var.aws_amis
-  instance_type               = "t2.medium"
+  instance_type               = var.instance_type
   key_name                    = aws_key_pair.user_key.key_name
   vpc_security_group_ids      = [aws_security_group.web_and_ssh.id]
   subnet_id                   = aws_subnet.subnet01.id
@@ -18,6 +18,6 @@ resource "aws_instance" "web01" {
   }
 
   tags = {
-    Name = "Cloudacia"
+    Name = "Jenkins"
   }
 }
