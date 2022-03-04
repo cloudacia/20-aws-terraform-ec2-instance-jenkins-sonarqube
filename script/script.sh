@@ -1,9 +1,11 @@
 #!/bin/bash
 ###############################################
-# Install Yum Uitls package                   #
+# Install Uitls package                   #
 ###############################################
-function InstallYumUtils(){
-  sudo yum install -y yum-utils
+function InstallTools(){
+  sudo yum install yum-utils -y
+  sudo yum install git -y
+  sudo yum install wget  -y
 }
 
 ###############################################
@@ -30,7 +32,7 @@ function JenkinsRepo(){
 # Install EPEL repository                     #
 ###############################################
 function InstallEpel(){
-  sudo sudo yum install epel-release -y
+  sudo yum install epel-release -y
 }
 
 ###############################################
@@ -48,12 +50,36 @@ function StartJenkins(){
   sudo systemctl enable jenkins
 }
 
+###############################################
+# Install YUM utils                           #
+###############################################
+function InstallYumUtils(){
+  sudo yum install -y yum-utils
+}
+
+###############################################
+# Add HashipCorp repository                   #
+###############################################
+function AddHashiCorpRepo(){
+  repo_url="https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+  sudo yum-config-manager --add-repo $repo_url
+}
+
+###############################################
+# Install terraform                           #
+###############################################
+function InstallTerraform(){
+  sudo yum -y install terraform
+}
 ##################
 # Script worflow #
 ##################
-InstallYumUtils
+InstallTools
 InstallJava
 JenkinsRepo
 InstallEpel
 InstallJenkins
 StartJenkins
+InstallYumUtils
+AddHashiCorpRepo
+InstallTerraform
