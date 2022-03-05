@@ -91,6 +91,8 @@ function InstallTerraform(){
 # Script worflow #
 ##################
 InstallTools
+InstallDockerRepo
+InstallDocker
 InstallJava
 JenkinsRepo
 InstallEpel
