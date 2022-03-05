@@ -1,6 +1,6 @@
 #!/bin/bash
 ###############################################
-# Install Uitls package                   #
+# Install Uitls package                       #
 ###############################################
 function InstallTools(){
   sudo yum install yum-utils -y
