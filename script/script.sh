@@ -9,6 +9,21 @@ function InstallTools(){
 }
 
 ###############################################
+# Install Docker repo                         #
+###############################################
+function InstallDockerRepo(){
+  sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+}
+
+###############################################
+# Install Docker                              #
+###############################################
+function InstallDocker(){
+  sudo yum install docker-ce docker-ce-cli containerd.io -y
+  sudo systemctl start docker
+}
+
+###############################################
 # Install Java OpenJDK                        #
 ###############################################
 function InstallJava(){
@@ -46,8 +61,9 @@ function InstallJenkins(){
 # Start Jenkins                               #
 ###############################################
 function StartJenkins(){
-  sudo systemctl start jenkins
+  sudo usermod -aG docker jenkins
   sudo systemctl enable jenkins
+  sudo systemctl start jenkins
 }
 
 ###############################################

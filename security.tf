@@ -12,7 +12,15 @@ resource "aws_security_group" "web_and_ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # https port
+  # http port
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # ssh port
   ingress {
     from_port   = 22
     to_port     = 22
