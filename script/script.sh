@@ -12,7 +12,8 @@ function InstallTools(){
 # Install Docker repo                         #
 ###############################################
 function InstallDockerRepo(){
-  sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  repo_url="https://download.docker.com/linux/centos/docker-ce.repo"
+  sudo yum-config-manager --add-repo $repo_url
 }
 
 ###############################################
@@ -58,6 +59,34 @@ function InstallJenkins(){
 }
 
 ###############################################
+# Disable Jenkins Wizard configuration        #
+###############################################
+function JenkinsDisableWizard(){
+  jenkins_path="/var/lib/jenkins/"
+  sudo mkdir "$jenkins_path"/init.groovy.d
+  sudo cat << EOF > "$jenkins_path"/init.groovy.d/basic-security.groovy
+#!groovy
+
+import jenkins.model.*
+import hudson.util.*;
+import jenkins.install.*;
+
+def instance = Jenkins.getInstance()
+
+instance.setInstallState(InstallState.INITIAL_SETUP_COMPLETED)
+EOF
+
+  echo 'export JAVA_ARGS="Djenkins.install.runSetupWizard=false"' >> /etc/profile
+  echo 'export JAVA_ARGS="Djenkins.install.runSetupWizard=false"' >> /etc/profile.d/sh.local
+  chmod 0755 /etc/profile.d/sh.local
+  source /etc/profile
+  export JAVA_ARGS="Djenkins.install.runSetupWizard=false"
+  cat <<EOF >> /etc/environment
+JAVA_ARGS=Djenkins.install.runSetupWizard=false
+EOF
+}
+
+###############################################
 # Start Jenkins                               #
 ###############################################
 function StartJenkins(){
@@ -87,6 +116,15 @@ function AddHashiCorpRepo(){
 function InstallTerraform(){
   sudo yum -y install terraform
 }
+
+
+###############################################
+# restart Jenkins                             #
+###############################################
+function RestartJenkins(){
+  sudo systemctl restart jenkins
+}
+
 ##################
 # Script worflow #
 ##################
@@ -97,7 +135,9 @@ InstallJava
 JenkinsRepo
 InstallEpel
 InstallJenkins
+JenkinsDisableWizard
 StartJenkins
 InstallYumUtils
 AddHashiCorpRepo
 InstallTerraform
+RestartJenkins
