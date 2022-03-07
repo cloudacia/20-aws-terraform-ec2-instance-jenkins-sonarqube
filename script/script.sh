@@ -84,6 +84,8 @@ EOF
   cat <<EOF >> /etc/environment
 JAVA_ARGS=Djenkins.install.runSetupWizard=false
 EOF
+
+sudo chown -R jenkins:jenkins "$jenkins_path"/init.groovy.d
 }
 
 ###############################################
@@ -117,6 +119,60 @@ function InstallTerraform(){
   sudo yum -y install terraform
 }
 
+###############################################
+# Install AWS CLI                             #
+###############################################
+function InstallAWSCli(){
+  sudo yum install awscli -y
+}
+
+
+###############################################
+# Copying Jenkins Plugins Mananger from S3    #
+###############################################
+function GetJenkinsPluginsManager(){
+  s3_bucket="cloudacia-jenkins-jsac-files"
+  s3_key="jenkins-plugin-manager-2.12.3.jar"
+  jenkins_path="/var/lib/jenkins"
+  sudo aws s3 cp s3://"$s3_bucket"/"$s3_key" "$jenkins_path"
+  sudo chown jenkins:jenkins "$jenkins_path"/"$s3_key"
+}
+
+###############################################
+# Copying Jenkins Plugins list file from S3   #
+###############################################
+function GetJenkinsPluginsList(){
+  s3_bucket="cloudacia-jenkins-jsac-files"
+  s3_key="plugins.txt"
+  jenkins_path="/var/lib/jenkins"
+  sudo aws s3 cp s3://"$s3_bucket"/"$s3_key" "$jenkins_path"
+  sudo chown jenkins:jenkins "$jenkins_path"/"$s3_key"
+}
+
+###############################################
+# Install Jenkins Plugin Manager              #
+###############################################
+function InstallJenkinsPlugins(){
+  jenkins_plugins_manager="jenkins-plugin-manager-2.12.3.jar"
+  jenkins_path="/var/lib/jenkins"
+  jenkins_war_path="/usr/lib/jenkins/jenkins.war"
+  sudo java -jar "$jenkins_path"/"$jenkins_plugins_manager" --war "$jenkins_war_path" --plugin-download-directory "$jenkins_path"/plugins --plugin-file "$jenkins_path"/plugins.txt
+}
+
+###############################################
+# Install Jenkins Plugin Manager              #
+###############################################
+function ConfigJenkinsAsCodePlugin(){
+  cat <<EOF >> /etc/environment
+CASC_JENKINS_CONFIG=/var/lib/jenkins
+EOF
+
+  s3_bucket="cloudacia-jenkins-jsac-files"
+  s3_key="jenkins.yaml"
+  jenkins_path="/var/lib/jenkins"
+  sudo aws s3 cp s3://"$s3_bucket"/"$s3_key" "$jenkins_path"
+  sudo chown jenkins:jenkins "$jenkins_path"/"$s3_key"
+}
 
 ###############################################
 # restart Jenkins                             #
@@ -140,4 +196,10 @@ StartJenkins
 InstallYumUtils
 AddHashiCorpRepo
 InstallTerraform
+RestartJenkins
+InstallAWSCli
+GetJenkinsPluginsManager
+GetJenkinsPluginsList
+InstallJenkinsPlugins
+ConfigJenkinsAsCodePlugin
 RestartJenkins

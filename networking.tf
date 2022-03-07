@@ -4,7 +4,7 @@ resource "aws_vpc" "big_data" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "first-name_last-name"
+    Name = "Jenkins"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_subnet" "subnet01" {
   availability_zone_id = var.availability_zone01
 
   tags = {
-    Name = "first-name_last-name"
+    Name = "Jenkins"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_route_table" "rt01" {
   vpc_id = aws_vpc.big_data.id
 
   tags = {
-    Name = "first-name_last-name"
+    Name = "Jenkins"
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.big_data.id
 
   tags = {
-    Name = "first-name_last-name"
+    Name = "Jenkins"
   }
 }
 
