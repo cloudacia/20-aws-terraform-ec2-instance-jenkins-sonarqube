@@ -1,30 +1,30 @@
 # AWS VPC
-resource "aws_vpc" "big_data" {
+resource "aws_vpc" "development" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
 
   tags = {
-    Name = "Jenkins"
+    Name = "CI/CD Pipeline"
   }
 }
 
 # AWS SUBNET #1
 resource "aws_subnet" "subnet01" {
-  vpc_id               = aws_vpc.big_data.id
+  vpc_id               = aws_vpc.development.id
   cidr_block           = var.subnet01
   availability_zone_id = var.availability_zone01
 
   tags = {
-    Name = "Jenkins"
+    Name = "CI/CD Pipeline"
   }
 }
 
 # AWS ROUTING TABLE
 resource "aws_route_table" "rt01" {
-  vpc_id = aws_vpc.big_data.id
+  vpc_id = aws_vpc.development.id
 
   tags = {
-    Name = "Jenkins"
+    Name = "CI/CD Pipeline"
   }
 }
 
@@ -36,10 +36,10 @@ resource "aws_route_table_association" "rta01" {
 
 # AWS INTERNET GATEWAY
 resource "aws_internet_gateway" "ig" {
-  vpc_id = aws_vpc.big_data.id
+  vpc_id = aws_vpc.development.id
 
   tags = {
-    Name = "Jenkins"
+    Name = "CI/CD Pipeline"
   }
 }
 
