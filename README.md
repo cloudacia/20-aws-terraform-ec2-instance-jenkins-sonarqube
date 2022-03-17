@@ -22,7 +22,7 @@ Ansible manages Wordpress deploy on an EC2 instance
 * 1 x Private subnets
 * 1 x Public subnets
 * 1 x Internet Gateway
-* 1 x EC2
+* 2 x EC2
 * 1 x Security Groups
 
 **Getting started**
