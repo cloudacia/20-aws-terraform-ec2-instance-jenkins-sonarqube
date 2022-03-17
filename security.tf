@@ -43,7 +43,7 @@ resource "aws_security_group" "jenkins" {
 }
 
 
-resource "aws_security_group" "anchore" {
+resource "aws_security_group" "sonarqube" {
   name        = "Anchore"
   description = "Allow web incgress trafic"
   vpc_id      = aws_vpc.development.id
@@ -51,8 +51,8 @@ resource "aws_security_group" "anchore" {
   # Jenkins Anchore
   ingress {
     description = "Allow incoming traffic Anchore API port"
-    from_port   = 8228
-    to_port     = 8228
+    from_port   = 9000
+    to_port     = 9000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -76,6 +76,6 @@ resource "aws_security_group" "anchore" {
   }
 
   tags = {
-    Name = "Jenkins"
+    Name = "sonarqube"
   }
 }

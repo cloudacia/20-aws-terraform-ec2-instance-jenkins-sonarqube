@@ -23,4 +23,5 @@ docker-workflow:latest
 configuration-as-code:latest
 blueocean:latest
 job-dsl:latest
-anchore-container-scanner:1.0.23
+anchore-container-scanner:latest
+sonar:latest

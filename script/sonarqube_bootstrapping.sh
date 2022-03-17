@@ -40,10 +40,16 @@ function InstallDockerCompose(){
   sudo ln -s "$docker_bin" /usr/bin/docker-compose
 }
 
-function InstallAnchore(){
-  anchore_repo="https://engine.anchore.io/docs/quickstart/docker-compose.yaml"
-  sudo curl -O $anchore_repo
-  sudo docker-compose up -d
+###############################################
+# Install Sonarqube                           #
+###############################################
+function InstallSonarqube(){
+  sonarqube_remote_repo="https://github.com/SonarSource/docker-sonarqube.git"
+  sonarqube_local_repo="/root/docker-sonarqube"
+  sonarqube_compose_file="/root/docker-sonarqube/example-compose-files/sq-with-postgres/docker-compose.yml"
+  sudo git clone $sonarqube_remote_repo $sonarqube_local_repo
+  sudo sysctl -w vm.max_map_count=262144
+  sudo docker-compose -f $sonarqube_compose_file up -d
 }
 ##################
 # Script worflow #
@@ -53,4 +59,4 @@ InstallDockerRepo
 InstallDocker
 InstallUtils
 InstallDockerCompose
-InstallAnchore
+InstallSonarqube

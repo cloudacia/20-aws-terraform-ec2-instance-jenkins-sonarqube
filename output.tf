@@ -9,6 +9,6 @@ output "ec_jenkins_instance" {
 }
 
 # EC2 INSTANCE PUBLIC IP ADDRESS
-output "ec_anchore_instance" {
-  value = aws_instance.anchore_instance.public_ip
+output "ec_sonarqube_instance" {
+  value = aws_instance.sonarqube_instance.public_ip
 }
